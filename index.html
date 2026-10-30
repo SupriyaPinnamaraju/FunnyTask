@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funny Task - Impossible Challenge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="game-container">
+
+        <!-- PAGE 1: WELCOME -->
+        <section id="welcome-screen" class="screen active">
+            <div class="emoji">😂</div>
+            <p class="tagline">WELCOME TO</p>
+            <h1>FUNNY TASK!</h1>
+            <h2>Are You Excited? 😎</h2>
+            <p class="description">
+                Get ready for a crazy challenge!
+                Let's see how brave you are.
+            </p>
+
+            <button class="yes-btn welcome-btn" id="start-btn">
+                YES! LET'S GO 🔥
+            </button>
+        </section>
+
+
+        <!-- PAGE 2: CHALLENGE -->
+        <section id="challenge-screen" class="screen">
+
+            <div class="emoji">😈</div>
+
+            <p class="tagline">THE ULTIMATE CHALLENGE</p>
+            <h1>CAN YOU CLICK NO?</h1>
+
+            <div class="challenge-card">
+                <h2>Think you can catch me? 🤣</h2>
+
+                <p>
+                    Successfully click NO and win
+                    <strong>ONE FREE FOOD ITEM!</strong> 🎁
+                </p>
+
+                <p class="warning">
+                    But if you give up, you have to click YES! 😭
+                </p>
+            </div>
+
+            <div class="button-area" id="button-area">
+
+                <button id="no-btn" class="no-btn">
+                    NO 🙅
+                </button>
+
+                <button id="yes-btn" class="yes-btn">
+                    YES 😭
+                </button>
+
+            </div>
+
+            <p class="hint">
+                Psst... The NO button is very fast! 👀
+            </p>
+
+        </section>
+
+
+        <!-- PAGE 3: WIN -->
+        <section id="win-screen" class="screen">
+
+            <div class="emoji">🏆</div>
+            <p class="tagline">UNBELIEVABLE!</p>
+
+            <h1>YOU DID IT! 🎉</h1>
+
+            <h2>You caught the NO button!</h2>
+
+            <div class="result-card">
+                <p>Congratulations, Champion! 🥳</p>
+                <h2>YOU WON ONE FREE FOOD ITEM! 🍔</h2>
+                <p>Show this screen at our counter to claim your reward.</p>
+            </div>
+
+            <button class="play-btn" onclick="restartGame()">
+                PLAY AGAIN 🔄
+            </button>
+
+        </section>
+
+
+        <!-- PAGE 4: LOSE -->
+        <section id="lose-screen" class="screen">
+
+            <div class="emoji">🤣</div>
+            <p class="tagline">HAHAHAHA!</p>
+
+            <h1>YOU LOST! 😂</h1>
+
+            <h2>You couldn't catch NO!</h2>
+
+            <div class="result-card">
+                <p>Don't worry, better luck next time! 😜</p>
+                <h2>NOW BUY SOMETHING DELICIOUS! 🍟</h2>
+                <p>Your favourite food is waiting for you!</p>
+            </div>
+
+            <button class="play-btn" onclick="restartGame()">
+                TRY AGAIN 🔄
+            </button>
+
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
