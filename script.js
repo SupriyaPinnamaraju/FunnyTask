@@ -46,45 +46,47 @@ function moveNoButton() {
     noBtn.style.transform = "none";
 }
 
-// Desktop: Run away when mouse approaches
-noBtn.addEventListener("pointerenter", (event) => {
-    if (event.pointerType === "mouse") {
-        moveNoButton();
-    }
-});
+// Check whether pointer is close to NO
+function isNearNo(x, y) {
+    const rect = noBtn.getBoundingClientRect();
 
-// Mobile: Run away immediately on touch
-noBtn.addEventListener("pointerdown", (event) => {
-    if (event.pointerType !== "mouse") {
-        event.preventDefault();
-        moveNoButton();
-    }
-});
+    const margin = 100;
 
-// Desktop: Run away before mouse reaches button
+    return (
+        x >= rect.left - margin &&
+        x <= rect.right + margin &&
+        y >= rect.top - margin &&
+        y <= rect.bottom + margin
+    );
+}
+
+// Desktop: Escape before mouse reaches NO
 buttonArea.addEventListener("pointermove", (event) => {
     if (gameOver || event.pointerType !== "mouse") return;
 
-    const rect = noBtn.getBoundingClientRect();
-
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const distance = Math.hypot(
-        event.clientX - centerX,
-        event.clientY - centerY
-    );
-
-    if (distance < 100 && Date.now() - lastEscape > 100) {
+    if (
+        isNearNo(event.clientX, event.clientY) &&
+        Date.now() - lastEscape > 100
+    ) {
         lastEscape = Date.now();
         moveNoButton();
     }
 });
 
-// NO is never allowed to win
+// Mobile and desktop: Detect touch/click near NO
+buttonArea.addEventListener("pointerdown", (event) => {
+    if (gameOver) return;
+
+    if (isNearNo(event.clientX, event.clientY)) {
+        event.preventDefault();
+        moveNoButton();
+    }
+});
+
+// Extra protection against any accidental NO click
 noBtn.addEventListener("click", (event) => {
     event.preventDefault();
-    event.stopPropagation();
+    event.stopImmediatePropagation();
     moveNoButton();
 });
 
