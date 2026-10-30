@@ -12,7 +12,6 @@ const buttonArea = document.getElementById("button-area");
 let gameOver = false;
 let lastEscape = 0;
 
-// Show selected screen
 function showScreen(screen) {
     document.querySelectorAll(".screen").forEach(item => {
         item.classList.remove("active");
@@ -21,111 +20,87 @@ function showScreen(screen) {
     screen.classList.add("active");
 }
 
-// PAGE 1: Start game
 startBtn.addEventListener("click", () => {
     gameOver = false;
     showScreen(challengeScreen);
     resetNoButton();
 });
 
-// Move NO button to a random position
-function moveNoButton() {
-
-    if (gameOver) return;
-
-    const areaWidth = buttonArea.clientWidth;
-    const areaHeight = buttonArea.clientHeight;
-
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
-
-    const maxX = Math.max(0, areaWidth - btnWidth);
-    const maxY = Math.max(0, areaHeight - btnHeight);
-
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
-
-    noBtn.style.left = randomX + "px";
-    noBtn.style.top = randomY + "px";
-    noBtn.style.transform = "none";
-}
-
-// Reset NO button position
 function resetNoButton() {
     noBtn.style.left = "8%";
     noBtn.style.top = "50%";
     noBtn.style.transform = "translateY(-50%)";
 }
 
-// PAGE 2: Make NO escape
+function moveNoButton() {
+    if (gameOver) return;
+
+    const maxX = buttonArea.clientWidth - noBtn.offsetWidth;
+    const maxY = buttonArea.clientHeight - noBtn.offsetHeight;
+
+    const randomX = Math.random() * Math.max(0, maxX);
+    const randomY = Math.random() * Math.max(0, maxY);
+
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+    noBtn.style.transform = "none";
+}
+
+// Desktop: Run away when mouse approaches
 noBtn.addEventListener("pointerenter", (event) => {
     if (event.pointerType === "mouse") {
         moveNoButton();
     }
 });
 
-// Also escape when someone touches it
+// Mobile: Run away immediately on touch
 noBtn.addEventListener("pointerdown", (event) => {
     if (event.pointerType !== "mouse") {
-        // A small lucky chance to catch NO!
-        if (Math.random() < 0.03) return;
-
         event.preventDefault();
         moveNoButton();
     }
 });
 
-// Desktop: Escape when the cursor gets close
+// Desktop: Run away before mouse reaches button
 buttonArea.addEventListener("pointermove", (event) => {
-
     if (gameOver || event.pointerType !== "mouse") return;
 
-    const buttonRect = noBtn.getBoundingClientRect();
+    const rect = noBtn.getBoundingClientRect();
 
-    const centerX = buttonRect.left + buttonRect.width / 2;
-    const centerY = buttonRect.top + buttonRect.height / 2;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
     const distance = Math.hypot(
         event.clientX - centerX,
         event.clientY - centerY
     );
 
-    if (distance < 65 && Date.now() - lastEscape > 100) {
+    if (distance < 100 && Date.now() - lastEscape > 100) {
         lastEscape = Date.now();
-
-        if (Math.random() < 0.03) return;
-
         moveNoButton();
     }
 });
 
-// If someone successfully clicks NO
-noBtn.addEventListener("click", () => {
-
-    if (gameOver) return;
-
-    gameOver = true;
-    showScreen(winScreen);
-
+// NO is never allowed to win
+noBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    moveNoButton();
 });
 
-// YES means they give up
+// YES means lose
 yesBtn.addEventListener("click", () => {
-
     if (gameOver) return;
 
     gameOver = true;
     showScreen(loseScreen);
-
 });
 
-// Play again for the next customer
+// Restart
 function restartGame() {
-
     gameOver = false;
     lastEscape = 0;
 
     resetNoButton();
-
     showScreen(welcomeScreen);
 }
