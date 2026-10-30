@@ -257,3 +257,17 @@ button:active {
         right: 5%;
     }
 }
+
+/* Make NO visually visible but impossible to tap */
+#no-btn {
+    pointer-events: none !important;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Improve touch handling */
+.button-area {
+    touch-action: none;
+    position: relative;
+}
+
